@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model List<Domain.Models.Space>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color text-center">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-info" />
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<div class="container-fluid">
+
+    <div class="mb-3 d-flex justify-content-between pb-3" style="border-bottom: solid 2px gainsboro; box-shadow: #333533 0px 5px 15px -15px">
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-outline-dark   h-100 " asp-controller="Space" asp-action="ExportAllSpaces">Export All Spaces</a>
+        }
+        @if (User.IsInRole("User"))
+        {
+            <a class="btn btn-outline-dark disabled h-100 " asp-controller="Space" asp-action="ExportAllSpaces">Export All Spaces</a>
+
+        }
+    </div>
+
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+
+        //otvori red
+        if (i % 3 == 0)
+        {
+            @: <div class="row mb-3">
+        }
+                    <div class="col-4">
+                       <div class="card" style="width: 20rem; height: 35rem">
+                           <img class="card-img-top" src="@item.image" style="background-size: cover; width:100%; height: 80%;"/>
+                           <div class="card-body m-1 p-2">
+                               <h3 class="card-title font-weight-bold text-uppercase">@item.name</h3>
+                               <h5><i>Price:</i> <b>@item.price MKD</b></h5>
+
+                           </div>
+                          
+
+                           <div class="card-footer d-flex justify-content-end align-items-center">
+                               <div>
+                                   <a class="btn btn-success font-weight-bold w-auto m-1" asp-controller="Space" asp-action="ReserveSpace" asp-route-Id="@item.Id">ReserveSpace</a>
+                                   <a class="btn btn-danger font-weight-bold w-auto m-1" asp-controller="Space" asp-action="Delete" asp-route-id="@item.Id">Delete Space</a>
+                               </div>
+                               <div>
+                                    <a class="btn btn-secondary font-weight-bold w-auto m-1" asp-controller="Space" asp-action="Edit" asp-route-Id="@item.Id">Edit Space</a>
+                                    <a class="btn btn-info font-weight-bold w-auto m-1" asp-controller="Space" asp-action="Details" asp-route-Id="@item.Id">Details</a>
+                                </div>
+                           </div>
+                       </div>
+                   </div>
+        //zatvori red
+        if (i % 3 == 2)
+        {
+            @: </div>
+        }
+    }
+</div>
+<div class="text-center" style="border-top: solid 2px gainsboro">
+        <br />
+        <a class="btn btn-success h-100 " asp-controller="Space" asp-action="Create">Add new Space</a>
+</div>
+
+

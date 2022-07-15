@@ -1,0 +1,86 @@
+﻿@using Microsoft.Extensions.Options
+@model Domain.Dto.ReservationDto
+@inject IOptions<Domain.StripeSettings> Stripe 
+
+<h1 class="mb-3 ml-2">Your Reservation:</h1>
+
+<div class="container">
+    
+    <div class="row ml-1 mb-3">
+        @*<a asp-controller="Cart" asp-action="OrderNow" class="btn btn-info">Order Now</a>*@
+
+        @if (Model.TotalPrice != 0)
+        {
+            <form asp-controller="Reservation" asp-action="PayOrder" method="post">
+                <article>
+                    <script src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="@Stripe.Value.PublishableKey"
+                            data-locale="auto"
+                            data-description="Reserve Space Payment"
+                            data-amount="@(Model.TotalPrice * 100)"
+                            data-label="Pay @Model.TotalPrice MKD">
+                    </script>
+                </article>
+            </form>
+        }
+
+    </div>  
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Space</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Date From</th>
+                    <th scope="col">Date To</th>
+                    <th scope="col">Sum</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.ReservedSpaces.Count.Equals(0))
+                {
+                    <tr>
+                        <td colspan="6" style="font-weight: bold; text-transform: uppercase; text-align: center;">No Reserved Spaces</td>
+                    </tr>
+                }
+
+                @for (int i = 0; i < Model.ReservedSpaces.Count; i++)
+                {
+                    var item = Model.ReservedSpaces[i];
+
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@item.Space.name</td>
+                        <td>@item.Space.price</td>
+                        <td>@item.Space.DateFrom</td>
+                        <td>@item.Space.DateTo</td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Space.price * item.Quantity)MKD</td>
+                        <td><a class="btn btn-danger" asp-route-id="@item.Space.Id" asp-action="DeleteSpaceFromReservation">Remove Reservation</a></td>
+                    </tr>
+
+
+                }
+
+
+            </tbody>
+
+            <tfoot class="table-borderless">
+                <tr>
+                    <th scope="col">Your Total:</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">@Model.TotalPrice MKD</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+

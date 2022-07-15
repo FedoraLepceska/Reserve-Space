@@ -1,0 +1,25 @@
+﻿@using Domain.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model List<Domain.Models.Space>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to Reserve Space!</h1>
+  <p class="lead">Find a home for your holiday stay.</p>
+  <hr class="my-4">
+  <p>All Around The World!!</p>
+  <p class="lead">
+    <input type="button" class="btn btn-success" value="Browse Now!" onclick="@("window.location.href='" + @Url.Action("Index", "Space") + "'");" />
+  </p>
+</div>
+@*<div class="container text-center">
+@if (SignInManager.IsSignedIn(User))
+{
+    <h1 class="text-dark display-4">Where to @User.Identity.Name ?</h1>
+}
+<input type="button" class="btn btn-success" value="Browse Now!" onclick="@("window.location.href='" + @Url.Action("Index", "Space") + "'");" />
+</div>*@
