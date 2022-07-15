@@ -1,0 +1,25 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Homework.Domain.DomainModels.Order
+
+ <h2 class="mb-3 ml-2">Order Details For: <a class="btn btn-success font-weight-bold text-white">@Model.User.Email</a></h2>
+
+<div class="container-fluid">
+
+    @for (int i = 0; i < Model.TicketInOrders.Count(); i++)
+    {
+        var item = Model.TicketInOrders.ElementAt(i).OrderedTicket;
+
+            <div class="col-4">
+                <div class="card" style="width: 20rem; height: 35rem">
+                    <div class="card-body m-1 p-2">
+                        <h3 class="card-title">@item.Movie</h3>
+                        <h6><i>Price:</i> <b>@item.TicketPrice MKD</b></h6>
+                    </div>
+
+                </div>
+            </div>
+    }
+
+</div>
